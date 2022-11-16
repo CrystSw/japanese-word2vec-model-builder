@@ -11,8 +11,8 @@ __jawiki_dump_file_name = 'jawiki-latest-pages-articles.xml.bz2'
 __jawiki_dump_url = "https://dumps.wikimedia.org/jawiki/latest/{}".format(__jawiki_dump_file_name)  # noqa
 
 
-def get_tokens_iterator(tagger, iter_docs):
-    tokenize = partial(tokenizer.tokenize, tagger=tagger)
+def get_tokens_iterator(tokenizer_obj, iter_docs):
+    tokenize = partial(tokenizer.tokenize, tokenizer_obj=tokenizer_obj)
 
     def iter_tokens():
         for doc in iter_docs():
@@ -38,10 +38,6 @@ def get_options():
                         default='output/{}'.format(__jawiki_dump_file_name))
     parser.add_argument('--wikipedia-dump-url', default=__jawiki_dump_url)
 
-    parser.add_argument('--download-neologd', action='store_true',
-                        default=False)
-    parser.add_argument('--dictionary-path', default='output/dic')
-
     args = parser.parse_args()
     return vars(args)
 
@@ -50,17 +46,12 @@ def main():
     options = get_options()
 
     commands = [
-        'download_neologd',
         'download_wikipedia_dump',
         'build_gensim_model'
     ]
     if not any(options[c] for c in commands):
         print('At least one of following options needs to be specified:',
               *['  --' + c.replace('_', '-') for c in commands], sep='\n')
-
-    dic_path = options['dictionary_path']
-    if options['download_neologd']:
-        tokenizer.download_neologd(dic_path)
 
     wikipedia_dump_path = options['wikipedia_dump_path']
     wikipedia_dump_url = options['wikipedia_dump_url']
@@ -75,7 +66,7 @@ def main():
         with tempfile.TemporaryDirectory() as temp_dir:
             iter_docs = partial(wikipedia.iter_docs,
                                 wikipedia_dump_path, temp_dir)
-            iter_tokens = get_tokens_iterator(tokenizer.get_tagger(dic_path),
+            iter_tokens = get_tokens_iterator(tokenizer.get_tokenizer_obj(),
                                               iter_docs)
             word2vec.build_gensim_w2v_model(output_model_path, iter_tokens,
                                             size, window, min_count)

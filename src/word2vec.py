@@ -19,6 +19,6 @@ def build_gensim_w2v_model(model_path, iter_tokens, size, window, min_count):
         workers=multiprocessing.cpu_count()
     )
     model.build_vocab(iter_tokens())
-    model.train(iter_tokens(), total_examples=model.corpus_count, epochs=model.iter)
+    model.train(iter_tokens(), total_examples=sum([len(t) for t in iter_tokens()]), epochs=model.iter)
     model.init_sims(replace=True)
     model.save(model_path)

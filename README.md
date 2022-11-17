@@ -20,15 +20,12 @@ Requirements
 ------------
 
 + cURL
-+ MeCab == 0.996
-+ Python >= 3.4
++ Python == 3.7
 
 Setup
 -----
 
 ```
-git submodule init
-git submodule update
 python3 -m venv .env
 . .env/bin/activate
 pip3 install -r requirements.txt
@@ -41,7 +38,7 @@ An example to build a model at the default path. (output/word2vec.gensim.model)
 
 ```
 . .env/bin/activate
-./build --download-neologd --download-wikipedia-dump --build-gensim-model
+./build --download-wikipedia-dump --build-gensim-model
 ```
 
 Another example to specify hyper parameters.

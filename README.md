@@ -3,18 +3,8 @@ Japanese Word2Vec Model Builder
 
 A tool for building gensim word2vec model for Japanese.
 
-It uses MeCab for tokenization with mecab-ipadic-NEologd as a dictionary.
+It uses Sudachi for tokenization.
 Wikipedia is used as a corpus for training word2vec model.
-
-Trained model
--------------
-
-A trained word2vec model is available at:
-
-http://public.shiroyagi.s3.amazonaws.com/latest-ja-word2vec-gensim-model.zip
-
-Parameters used for training this model are `size=50, window=8, min_count=20`.
-
 
 Requirements
 ------------
